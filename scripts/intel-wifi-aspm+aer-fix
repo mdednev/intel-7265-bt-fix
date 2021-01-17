@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Disable ASPM for iwlwifi to solve Bluetooth audio chopping
+# /usr/bin/setpci -v -s ${PCI_SLOT_NAME} 0x50.B=0x40
+
+# Enable only L0s ASPM for iwlwifi to solve Bluetooth audio chopping
+/usr/bin/setpci -v -s ${PCI_SLOT_NAME} 0x50.B=0x41
+
+PCI_ROOT_DEV=$(dirname ${DEVPATH})
+
+source <(/usr/bin/udevadm info -x -q property -p ${PCI_ROOT_DEV} | sed s,^,ROOT_,)
+
+# Disable AER at WiFi adapter segment root port
+/usr/bin/setpci -v -s ${ROOT_PCI_SLOT_NAME} ECAP_AER+0x14.l=0x41:0x41
+

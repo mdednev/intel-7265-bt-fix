@@ -1,0 +1,2 @@
+# Intel 7265 WiFi+Bluetooth adapter card rule
+SUBSYSTEM=="pci", ATTR{vendor}=="0x8086", ATTR{device}=="0x095a", RUN+="/usr/local/sbin/intel-wifi-aspm+aer-fix"
