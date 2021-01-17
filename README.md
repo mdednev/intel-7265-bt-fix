@@ -25,6 +25,14 @@ I think this error messages are regarded to incorrectly implemented AER in the I
 my laptop. So included script disables AER for the root port, used to connect Intel WiFi adapter.
 This solves AER issues.
 
+## Requirements
+
+Configuration script uses **setpci** tool from pciutils package. So if you are using Debian you 
+should install it with the following command:
+```
+sudo apt install pciutils
+```
+
 ## Installation
 
 Run ./install.sh script with root privileges and reboot.
