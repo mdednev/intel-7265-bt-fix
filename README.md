@@ -10,6 +10,7 @@ by WiFi adapter. This long transaction times are caused by incorrect implementat
 Intel 7265 WiFi. Changing ASPM setting of WiFi adapter to the L0 or L0s solves chopping issues.
 
 Another issue is lot of following error messages in kernel log:
+
 ```
 pcieport 0000:00:1c.5: AER: Corrected error received: 0000:00:1c.5
 pcieport 0000:00:1c.5: AER: PCIe Bus Error: severity=Corrected, type=Physical Layer, (Transmitter ID)
@@ -27,11 +28,8 @@ This solves AER issues.
 
 ## Requirements
 
-Configuration script uses **setpci** tool from pciutils package. So if you are using Debian you 
-should install it with the following command:
-```
-sudo apt install pciutils
-```
+Configuration script uses *setpci* tool from pciutils package. So if you are using Debian you 
+should install it with the following command: `sudo apt install pciutils`
 
 ## Installation
 
