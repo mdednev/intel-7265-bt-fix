@@ -21,8 +21,10 @@ source <(/usr/bin/udevadm info -x -q property -p ${PCI_ROOT_DEV} | sed s,^,ROOT_
 # Disable AER at WiFi adapter segment root port
 # 0x0001 - Receiver Error Mask
 # 0x0040 - Bad TLP Mask
+# 0x0080 - Bad DLLP Mask
 # 0x1000 - Replay Timer Timeout Mask
-/usr/bin/setpci -v -s ${ROOT_PCI_SLOT_NAME} ECAP_AER+0x14.l=0x1000:0x1000
+# 0x2000 - Advisory Non-Fatal Error Mask
+/usr/bin/setpci -v -s ${ROOT_PCI_SLOT_NAME} ECAP_AER+0x14.l=0x30C1:0x30C1
 
 # Modify Link Control Register (Offset 10h) in PCI Express Capability registers
 # of PCI Express Root Complex port
