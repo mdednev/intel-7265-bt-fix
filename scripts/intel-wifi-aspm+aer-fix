@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# Modify Link Control Register (Offset 10h) in PCI Express Capability registers
-# of WiFi adapter
-
-# Disable ASPM for iwlwifi to solve Bluetooth audio chopping
-# /usr/bin/setpci -v -s ${PCI_SLOT_NAME} CAP_EXP+0x10.B=0x00:0x03
-
-# Enable only L0s ASPM for iwlwifi to solve Bluetooth audio chopping
-/usr/bin/setpci -v -s ${PCI_SLOT_NAME} CAP_EXP+0x10.B=0x01:0x03
-
 # Find out the PCIE parent of WiFi device
 PCI_ROOT_DEV=$(dirname ${DEVPATH})
 
@@ -18,17 +9,21 @@ source <(/usr/bin/udevadm info -x -q property -p ${PCI_ROOT_DEV} | sed s,^,ROOT_
 # Modify Correctable Error Mask Register (Offset 14h) in Advanced Error Reporting Capability
 # of PCI Express Root Complex port
 
-# Disable AER at WiFi adapter segment root port
+# Disable AER at WiFi adapter segment root port and WiFi adapter
 # 0x0001 - Receiver Error Mask
 # 0x0040 - Bad TLP Mask
 # 0x0080 - Bad DLLP Mask
 # 0x1000 - Replay Timer Timeout Mask
 # 0x2000 - Advisory Non-Fatal Error Mask
+/usr/bin/setpci -v -s ${PCI_SLOT_NAME}  ECAP_AER+0x14.l=0x2001:0x2001
 /usr/bin/setpci -v -s ${ROOT_PCI_SLOT_NAME} ECAP_AER+0x14.l=0x30C1:0x30C1
 
 # Modify Link Control Register (Offset 10h) in PCI Express Capability registers
 # of PCI Express Root Complex port
 
-# Enable only L0s ASPM for RC port
+# Enable only L0s ASPM for iwlwifi device and RC port in Link Control Register 
+# (Offset 10h) in PCI Express Capability to solve Bluetooth audio chopping 
+# while intensive data transfer over WiFi
+/usr/bin/setpci -v -s ${PCI_SLOT_NAME} CAP_EXP+0x10.B=0x01:0x03
 /usr/bin/setpci -v -s ${ROOT_PCI_SLOT_NAME} CAP_EXP+0x10.B=0x01:0x03
 
